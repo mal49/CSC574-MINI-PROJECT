@@ -1,0 +1,95 @@
+*{
+    font-family: 'Roboto', sans-serif;
+}
+
+body{
+    background-image: url(../public/assets/mesh-197.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: aliceblue;
+    width: 400px;
+    height: 300px;
+    border-radius: 8px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    /* Center the container itself in the viewport */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.container h1 {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.login-content {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type=text] {
+    width: 300px;
+    height: 30px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 3px;
+    outline: none;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+input[type=submit] {
+    width: 120px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    background-color: #e6394a;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.15s ease;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    transform: translateY(-2px);
+}
+
+input[type=submit]:hover {
+    background-color: #a62838;
+    transform: translateY(-4px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+input[type=submit]:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #8e2230;
+}
+
+.login-content a {
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    margin-bottom: 20px;
+    text-decoration: none;
+}
