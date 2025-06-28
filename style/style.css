@@ -874,10 +874,6 @@ input[type=submit]:active {
     line-height: 1.5;
 }
 
-.faq-list {
-    space-y: 20px;
-}
-
 .faq-item {
     padding: 20px;
     background: rgba(240, 248, 255, 0.5);
