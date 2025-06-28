@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ribeye&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Course Registration - Stellaris University</title>
+</head>
+
+<body>
+    <div class="course-registration-container">
+        <!-- Header Section -->
+        <header class="course-header">
+            <div class="header-content">
+                <h1 class="course-title">✨ Course Registration</h1>
+                <p class="course-subtitle">Course Registration for Stellaris University</p>
+                <div class="magic-divider"></div>
+                <p class="course-description">Add courses to your enrollment for the current semester</p>
+            </div>
+        </header>
+
+        <!-- Main Form Container -->
+        <div class="form-wizard">
+            <form class="registration-form">
+                <!-- Section 1: Add Courses -->
+                <section class="form-step active">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-icon">➕</div>
+                            <h2 class="step-title">Add Courses</h2>
+                            <p class="step-description">Specify courses you wish to add to your enrollment</p>
+                        </div>
+
+                        <div class="courses-container">
+                            <div class="course-row">
+                                <div class="course-number">1</div>
+                                <div class="course-fields">
+                                    <div class="field-group">
+                                        <label class="field-label">Course Code</label>
+                                        <input type="text" name="add_course1" class="modern-input course-code"
+                                            placeholder="ABC123">
+                                        <span class="field-icon">📖</span>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Group</label>
+                                        <input type="text" name="add_group1" class="modern-input" placeholder="A1">
+                                        <span class="field-icon">👥</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-row">
+                                <div class="course-number">2</div>
+                                <div class="course-fields">
+                                    <div class="field-group">
+                                        <label class="field-label">Course Code</label>
+                                        <input type="text" name="add_course2" class="modern-input course-code"
+                                            placeholder="ABC123">
+                                        <span class="field-icon">📖</span>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Group</label>
+                                        <input type="text" name="add_group2" class="modern-input" placeholder="A1">
+                                        <span class="field-icon">👥</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-row">
+                                <div class="course-number">3</div>
+                                <div class="course-fields">
+                                    <div class="field-group">
+                                        <label class="field-label">Course Code</label>
+                                        <input type="text" name="add_course3" class="modern-input course-code"
+                                            placeholder="ABC123">
+                                        <span class="field-icon">📖</span>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Group</label>
+                                        <input type="text" name="add_group3" class="modern-input" placeholder="A1">
+                                        <span class="field-icon">👥</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="course-row">
+                                <div class="course-number">4</div>
+                                <div class="course-fields">
+                                    <div class="field-group">
+                                        <label class="field-label">Course Code</label>
+                                        <input type="text" name="add_course4" class="modern-input course-code"
+                                            placeholder="ABC123">
+                                        <span class="field-icon">📖</span>
+                                    </div>
+                                    <div class="field-group">
+                                        <label class="field-label">Group</label>
+                                        <input type="text" name="add_group4" class="modern-input" placeholder="A1">
+                                        <span class="field-icon">👥</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="add-course-section">
+                                <button type="button" class="btn btn-outline add-course-btn">
+                                    <span class="btn-icon">➕</span>
+                                    Add Another Course
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon">💡</div>
+                            <div class="info-content">
+                                <h4>Course Code Format</h4>
+                                <p>Please use the format ABC123 (e.g., CSC574, MAT301, ENG201)</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+
+
+
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <div class="action-buttons">
+                        <a href="index.html" class="btn btn-secondary">
+                            <span class="btn-icon">←</span>
+                            Back to Home
+                        </a>
+                        <button type="reset" class="btn btn-outline">
+                            <span class="btn-icon">🔄</span>
+                            Reset Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-icon">✨</span>
+                            Register Courses
+                        </button>
+                    </div>
+
+                    <div class="form-footer">
+                        <p class="footer-text">
+                            <span class="footer-icon">🛡️</span>
+                            Your course registration will be processed securely by Stellaris University
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script/main.js"></script>
+</body>
+
+</html>

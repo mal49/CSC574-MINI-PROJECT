@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ribeye&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Sign Up</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="login-content">
+            <h1>Sign Up</h1>
+            <div class="form-row">
+                <input type="text" name="fullname" id="fullname" placeholder="Full Name" class="half-width">
+                <input type="text" name="student_id" id="student_id" placeholder="Student ID" class="half-width">
+            </div>
+            <div class="form-row">
+                <input type="email" name="email" id="email" placeholder="Email Address" class="half-width">
+                <input type="text" name="phone" id="phone" placeholder="Phone Number" class="half-width">
+            </div>
+            <div class="form-row">
+                <select name="campus" id="campus" class="select-input half-width">
+                    <option value="" disabled selected>Select Campus</option>
+                    <option value="crystal_heights">Crystal Heights</option>
+                    <option value="mystic_valley">Mystic Valley</option>
+                    <option value="starfall_academy">Starfall Academy</option>
+                    <option value="moonlight_grove">Moonlight Grove</option>
+                    <option value="aurora_peaks">Aurora Peaks</option>
+                    <option value="enchanted_forest">Enchanted Forest</option>
+                    <option value="shadowmere">Shadowmere</option>
+                    <option value="golden_shores">Golden Shores</option>
+                    <option value="celestial_tower">Celestial Tower</option>
+                    <option value="ember_citadel">Ember Citadel</option>
+                    <option value="twilight_sanctuary">Twilight Sanctuary</option>
+                    <option value="storm_peak">Storm Peak</option>
+                    <option value="arcane_gardens">Arcane Gardens</option>
+                    <option value="dragon_ridge">Dragon Ridge</option>
+                </select>
+                <select name="program" id="program" class="select-input half-width">
+                    <option value="" disabled selected>Select Program</option>
+                    <option value="computer_science">Computer Science</option>
+                    <option value="information_technology">Information Technology</option>
+                    <option value="software_engineering">Software Engineering</option>
+                    <option value="business_administration">Business Administration</option>
+                    <option value="accounting">Accounting</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="medicine">Medicine</option>
+                    <option value="law">Law</option>
+                    <option value="education">Education</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <input type="text" name="username" id="username" placeholder="Username" class="half-width">
+                <input type="password" name="password" id="password" placeholder="Password" class="half-width">
+            </div>
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+            <div class="terms-checkbox">
+                <input type="checkbox" id="terms" name="terms">
+                <label for="terms">I agree to Terms & Conditions</label>
+            </div>
+            <input type="submit" value="sign up">
+            <a href="login.html">Already have an account? Log in</a>
+        </div>
+    </div>
+
+    <script src="script/main.js"></script>
+</body>
+
+</html>
