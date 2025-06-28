@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ribeye&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Lecturer Dashboard - Stellaris University</title>
+</head>
+
+<body>
+    <div class="course-registration-container">
+        <!-- Header Section -->
+        <header class="course-header">
+            <div class="header-content">
+                <h1 class="course-title">👩‍🏫 Lecturer Dashboard</h1>
+                <p class="course-subtitle">Course Drop Request Management</p>
+                <div class="magic-divider"></div>
+                <p class="course-description">Review and process student course drop requests</p>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="form-wizard">
+            <!-- Statistics Summary -->
+            <section class="form-step active">
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-icon">📊</div>
+                        <h2 class="step-title">Request Summary</h2>
+                        <p class="step-description">Overview of pending drop requests</p>
+                    </div>
+
+                    <div class="dashboard-stats">
+                        <div class="stats-grid">
+                            <div class="stat-card pending">
+                                <div class="stat-icon">⏳</div>
+                                <div class="stat-info">
+                                    <h3 id="pending-count">0</h3>
+                                    <p>Pending Requests</p>
+                                </div>
+                            </div>
+                            <div class="stat-card approved">
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-info">
+                                    <h3 id="approved-count">0</h3>
+                                    <p>Approved Today</p>
+                                </div>
+                            </div>
+                            <div class="stat-card rejected">
+                                <div class="stat-icon">❌</div>
+                                <div class="stat-info">
+                                    <h3 id="rejected-count">0</h3>
+                                    <p>Rejected Today</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filter Section -->
+            <section class="form-step active">
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-icon">🔍</div>
+                        <h2 class="step-title">Filter Requests</h2>
+                        <p class="step-description">Filter drop requests by status or course</p>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="form-grid">
+                            <div class="field-group">
+                                <label class="field-label" for="status-filter">Status</label>
+                                <select id="status-filter" class="modern-input modern-select">
+                                    <option value="all">All Requests</option>
+                                    <option value="pending" selected>Pending Only</option>
+                                    <option value="approved">Approved</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="course-filter">Course Code</label>
+                                <input type="text" id="course-filter" class="modern-input"
+                                    placeholder="Filter by course code (e.g., CSC574)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Requests Table -->
+            <section class="form-step active">
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-icon">📋</div>
+                        <h2 class="step-title">Course Drop Requests</h2>
+                        <p class="step-description">Review and approve/reject student requests</p>
+                    </div>
+
+                    <div class="requests-container">
+                        <div class="table-wrapper">
+                            <table class="requests-table" id="requests-table">
+                                <thead>
+                                    <tr>
+                                        <th>Request Date</th>
+                                        <th>Course Code</th>
+                                        <th>Group</th>
+                                        <th>Reason</th>
+                                        <th>Explanation</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="requests-tbody">
+                                    <!-- Requests will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div class="no-requests-state" id="no-requests-state" style="display: none;">
+                            <div class="no-requests-icon">📝</div>
+                            <h3>No requests found</h3>
+                            <p>There are no course drop requests matching your current filters.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Actions -->
+            <div class="form-actions">
+                <div class="action-buttons">
+                    <a href="login.html" class="btn btn-secondary">
+                        <span class="btn-icon">←</span>
+                        Logout
+                    </a>
+                    <button type="button" class="btn btn-outline" onclick="refreshDashboard()">
+                        <span class="btn-icon">🔄</span>
+                        Refresh
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="exportRequests()">
+                        <span class="btn-icon">📊</span>
+                        Export Data
+                    </button>
+                </div>
+
+                <div class="form-footer">
+                    <p class="footer-text">
+                        <span class="footer-icon">🛡️</span>
+                        All actions are logged and stored securely
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval Modal -->
+    <div class="modal-overlay" id="approval-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Approve Request</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="request-details" id="modal-request-details">
+                    <!-- Request details will be populated -->
+                </div>
+                <div class="field-group">
+                    <label class="field-label" for="lecturer-comments">Lecturer Comments (Optional)</label>
+                    <textarea id="lecturer-comments" class="modern-textarea"
+                        placeholder="Add any comments about this decision..." rows="4" maxlength="300"></textarea>
+                    <div class="textarea-footer">
+                        <span class="char-count">0/300</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirm-action-btn" onclick="confirmAction()">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/main.js"></script>
+    <script>
+        // Lecturer Dashboard Logic
+        let currentRequests = [];
+        let currentAction = null;
+        let currentRequestIndex = null;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeLecturerDashboard();
+        });
+
+        function initializeLecturerDashboard() {
+            loadDropRequests();
+            initializeFilters();
+            initializeCharacterCounter();
+            updateStatistics();
+            console.log('🎓 Lecturer Dashboard Initialized');
+        }
+
+        function loadDropRequests() {
+            // Load requests from localStorage
+            const requests = JSON.parse(localStorage.getItem('stellaris_drop_requests') || '[]');
+
+            // Add mock data if no real requests exist (for demonstration)
+            if (requests.length === 0) {
+                const mockRequests = [
+                    {
+                        courseCode: 'CSC574',
+                        courseGroup: 'A',
+                        courseId: '1',
+                        reason: 'schedule_conflict',
+                        explanation: 'This course conflicts with my part-time job schedule. I work every Tuesday and Thursday from 2-6 PM and cannot attend the lab sessions.',
+                        requestDate: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+                        status: 'pending'
+                    },
+                    {
+                        courseCode: 'MAT543',
+                        courseGroup: 'B',
+                        courseId: '2',
+                        reason: 'excessive_workload',
+                        explanation: 'I am currently taking 18 credit hours this semester and finding it difficult to manage the workload. I need to drop this course to focus on my core subjects.',
+                        requestDate: new Date(Date.now() - 172800000).toISOString(), // 2 days ago
+                        status: 'pending'
+                    },
+                    {
+                        courseCode: 'ENG302',
+                        courseGroup: 'C',
+                        courseId: '3',
+                        reason: 'personal_reasons',
+                        explanation: 'Due to a family emergency, I need to reduce my course load this semester. This course is not essential for my graduation timeline.',
+                        requestDate: new Date(Date.now() - 259200000).toISOString(), // 3 days ago
+                        status: 'pending'
+                    }
+                ];
+                localStorage.setItem('stellaris_drop_requests', JSON.stringify(mockRequests));
+                currentRequests = mockRequests;
+            } else {
+                currentRequests = requests;
+            }
+
+            displayRequests(currentRequests);
+        }
+
+        function displayRequests(requests) {
+            const tbody = document.getElementById('requests-tbody');
+            const noRequestsState = document.getElementById('no-requests-state');
+
+            if (requests.length === 0) {
+                tbody.innerHTML = '';
+                noRequestsState.style.display = 'block';
+                return;
+            }
+
+            noRequestsState.style.display = 'none';
+
+            tbody.innerHTML = requests.map((request, index) => {
+                const requestDate = new Date(request.requestDate).toLocaleDateString();
+                const reasonText = getReasonText(request.reason);
+                const statusClass = `status-${request.status}`;
+                const actionButtons = request.status === 'pending' ?
+                    `<button class="btn-approve" onclick="showApprovalModal(${index}, 'approve')" title="Approve Request">
+                        <span class="btn-icon">✅</span>
+                    </button>
+                    <button class="btn-reject" onclick="showApprovalModal(${index}, 'reject')" title="Reject Request">
+                        <span class="btn-icon">❌</span>
+                    </button>` :
+                    `<span class="status-badge ${statusClass}">${request.status.toUpperCase()}</span>`;
+
+                return `
+                    <tr class="request-row ${statusClass}">
+                        <td>${requestDate}</td>
+                        <td class="course-code">${request.courseCode}</td>
+                        <td>${request.courseGroup}</td>
+                        <td>${reasonText}</td>
+                        <td class="explanation-cell">
+                            <div class="explanation-text" title="${request.explanation}">
+                                ${request.explanation.substring(0, 100)}${request.explanation.length > 100 ? '...' : ''}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-badge ${statusClass}">${request.status.toUpperCase()}</span>
+                        </td>
+                        <td class="actions-cell">
+                            ${actionButtons}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function getReasonText(reason) {
+            const reasons = {
+                'schedule_conflict': 'Schedule Conflict',
+                'excessive_workload': 'Excessive Workload',
+                'missing_prerequisite': 'Missing Prerequisite',
+                'personal_reasons': 'Personal Reasons',
+                'academic_planning': 'Academic Planning',
+                'financial_constraints': 'Financial Constraints',
+                'other': 'Other'
+            };
+            return reasons[reason] || reason;
+        }
+
+        function initializeFilters() {
+            const statusFilter = document.getElementById('status-filter');
+            const courseFilter = document.getElementById('course-filter');
+
+            statusFilter.addEventListener('change', filterRequests);
+            courseFilter.addEventListener('input', filterRequests);
+        }
+
+        function filterRequests() {
+            const statusFilter = document.getElementById('status-filter').value;
+            const courseFilter = document.getElementById('course-filter').value.toLowerCase();
+
+            let filteredRequests = currentRequests;
+
+            // Filter by status
+            if (statusFilter !== 'all') {
+                filteredRequests = filteredRequests.filter(request => request.status === statusFilter);
+            }
+
+            // Filter by course code
+            if (courseFilter) {
+                filteredRequests = filteredRequests.filter(request =>
+                    request.courseCode.toLowerCase().includes(courseFilter));
+            }
+
+            displayRequests(filteredRequests);
+            updateStatistics();
+        }
+
+        function updateStatistics() {
+            const today = new Date().toDateString();
+            const pendingCount = currentRequests.filter(r => r.status === 'pending').length;
+            const approvedToday = currentRequests.filter(r =>
+                r.status === 'approved' && new Date(r.processedDate || r.requestDate).toDateString() === today).length;
+            const rejectedToday = currentRequests.filter(r =>
+                r.status === 'rejected' && new Date(r.processedDate || r.requestDate).toDateString() === today).length;
+
+            document.getElementById('pending-count').textContent = pendingCount;
+            document.getElementById('approved-count').textContent = approvedToday;
+            document.getElementById('rejected-count').textContent = rejectedToday;
+        }
+
+        function showApprovalModal(requestIndex, action) {
+            currentRequestIndex = requestIndex;
+            currentAction = action;
+
+            const request = currentRequests[requestIndex];
+            const modal = document.getElementById('approval-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalDetails = document.getElementById('modal-request-details');
+            const confirmBtn = document.getElementById('confirm-action-btn');
+
+            // Set modal title and button
+            modalTitle.textContent = action === 'approve' ? 'Approve Request' : 'Reject Request';
+            confirmBtn.textContent = action === 'approve' ? 'Approve' : 'Reject';
+            confirmBtn.className = `btn ${action === 'approve' ? 'btn-primary' : 'btn-danger'}`;
+
+            // Display request details
+            modalDetails.innerHTML = `
+                <div class="request-summary">
+                    <h4>Request Details</h4>
+                    <div class="detail-row">
+                        <strong>Course:</strong> ${request.courseCode} (Group ${request.courseGroup})
+                    </div>
+                    <div class="detail-row">
+                        <strong>Reason:</strong> ${getReasonText(request.reason)}
+                    </div>
+                    <div class="detail-row">
+                        <strong>Student Explanation:</strong>
+                        <div class="explanation-full">${request.explanation}</div>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Request Date:</strong> ${new Date(request.requestDate).toLocaleString()}
+                    </div>
+                </div>
+            `;
+
+            // Clear previous comments
+            document.getElementById('lecturer-comments').value = '';
+            document.querySelector('.char-count').textContent = '0/300';
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('approval-modal').style.display = 'none';
+            currentRequestIndex = null;
+            currentAction = null;
+        }
+
+        function confirmAction() {
+            if (currentRequestIndex === null || !currentAction) return;
+
+            const comments = document.getElementById('lecturer-comments').value.trim();
+            const request = currentRequests[currentRequestIndex];
+
+            // Update request status
+            request.status = currentAction === 'approve' ? 'approved' : 'rejected';
+            request.processedDate = new Date().toISOString();
+            request.lecturerComments = comments;
+
+            // Save to localStorage
+            localStorage.setItem('stellaris_drop_requests', JSON.stringify(currentRequests));
+
+            // Show notification
+            const message = currentAction === 'approve' ?
+                '✅ Request approved successfully!' :
+                '❌ Request rejected successfully!';
+            showNotification(message, 'success');
+
+            // Close modal and refresh display
+            closeModal();
+            filterRequests();
+            updateStatistics();
+        }
+
+        function refreshDashboard() {
+            loadDropRequests();
+            updateStatistics();
+            showNotification('📊 Dashboard refreshed!', 'info');
+        }
+
+        function exportRequests() {
+            const data = currentRequests.map(request => ({
+                'Request Date': new Date(request.requestDate).toLocaleDateString(),
+                'Course Code': request.courseCode,
+                'Group': request.courseGroup,
+                'Reason': getReasonText(request.reason),
+                'Status': request.status.toUpperCase(),
+                'Processed Date': request.processedDate ? new Date(request.processedDate).toLocaleDateString() : 'N/A'
+            }));
+
+            const csv = convertToCSV(data);
+            downloadCSV(csv, 'course_drop_requests.csv');
+            showNotification('📊 Data exported successfully!', 'success');
+        }
+
+        function convertToCSV(data) {
+            if (data.length === 0) return '';
+
+            const headers = Object.keys(data[0]);
+            const csvHeaders = headers.join(',');
+            const csvRows = data.map(row =>
+                headers.map(header => `"${row[header]}"`).join(',')
+            );
+
+            return [csvHeaders, ...csvRows].join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', filename);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // Character counter for modal textarea
+        function initializeCharacterCounter() {
+            const textarea = document.getElementById('lecturer-comments');
+            const charCount = document.querySelector('.char-count');
+
+            if (textarea && charCount) {
+                textarea.addEventListener('input', function () {
+                    const remaining = this.value.length;
+                    charCount.textContent = `${remaining}/300`;
+
+                    if (remaining > 270) {
+                        charCount.style.color = '#e6394a';
+                    } else {
+                        charCount.style.color = '#666';
+                    }
+                });
+            }
+        }
+
+        // Close modal when clicking outside
+        document.addEventListener('click', function (e) {
+            const modal = document.getElementById('approval-modal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+
+</html>

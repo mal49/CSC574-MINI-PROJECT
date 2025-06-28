@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ribeye&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Course Drop Request - Stellaris University</title>
+</head>
+
+<body>
+    <div class="course-registration-container">
+        <!-- Header Section -->
+        <header class="course-header">
+            <div class="header-content">
+                <h1 class="course-title">🗑️ Course Drop Request</h1>
+                <p class="course-subtitle">Drop Course Application</p>
+                <div class="magic-divider"></div>
+                <p class="course-description">Please provide a valid reason for dropping this course</p>
+            </div>
+        </header>
+
+        <!-- Drop Request Form -->
+        <div class="form-wizard">
+            <form class="registration-form drop-form" id="drop-form">
+                <!-- Course Information Section -->
+                <section class="form-step active">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-icon">📚</div>
+                            <h2 class="step-title">Course to Drop</h2>
+                            <p class="step-description">Confirm the course you want to drop</p>
+                        </div>
+
+                        <div class="course-drop-info" id="course-drop-info">
+                            <!-- Course info will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reason Selection Section -->
+                <section class="form-step active">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-icon">❓</div>
+                            <h2 class="step-title">Reason for Dropping</h2>
+                            <p class="step-description">Select or provide a valid reason for dropping this course</p>
+                        </div>
+
+                        <div class="reason-selection">
+                            <div class="radio-group">
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-schedule" name="drop_reason"
+                                        value="schedule_conflict">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-schedule">
+                                        <strong>Schedule Conflict</strong>
+                                        <span>Course time conflicts with another course or commitment</span>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-workload" name="drop_reason"
+                                        value="excessive_workload">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-workload">
+                                        <strong>Excessive Workload</strong>
+                                        <span>Taking too many courses this semester</span>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-prerequisite" name="drop_reason"
+                                        value="missing_prerequisite">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-prerequisite">
+                                        <strong>Missing Prerequisite</strong>
+                                        <span>Discovered I don't meet the course prerequisites</span>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-personal" name="drop_reason"
+                                        value="personal_reasons">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-personal">
+                                        <strong>Personal Reasons</strong>
+                                        <span>Health, family, or other personal circumstances</span>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-academic" name="drop_reason"
+                                        value="academic_planning">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-academic">
+                                        <strong>Academic Planning</strong>
+                                        <span>Course doesn't fit my degree plan or career goals</span>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-financial" name="drop_reason"
+                                        value="financial_constraints">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-financial">
+                                        <strong>Financial Constraints</strong>
+                                        <span>Cannot afford the course fees</span>
+                                    </label>
+                                </div>
+
+                                <div class="radio-option">
+                                    <input type="radio" id="reason-other" name="drop_reason" value="other">
+                                    <div class="radio-custom"></div>
+                                    <label for="reason-other">
+                                        <strong>Other</strong>
+                                        <span>Please specify in the text area below</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Additional Details Section -->
+                <section class="form-step active">
+                    <div class="step-card">
+                        <div class="step-header">
+                            <div class="step-icon">📝</div>
+                            <h2 class="step-title">Additional Details</h2>
+                            <p class="step-description">Provide additional explanation for your drop request</p>
+                        </div>
+
+                        <div class="reason-section">
+                            <label class="field-label" for="drop-explanation">
+                                Detailed Explanation <span class="required">*</span>
+                            </label>
+                            <textarea id="drop-explanation" name="drop_explanation" class="modern-textarea"
+                                placeholder="Please provide a detailed explanation for dropping this course. This information will help the academic office process your request."
+                                rows="6" maxlength="500"></textarea>
+                            <div class="textarea-footer">
+                                <span class="char-count">0/500</span>
+                            </div>
+                        </div>
+
+                        <div class="info-card">
+                            <div class="info-icon">💡</div>
+                            <div class="info-content">
+                                <h4>Important Notes</h4>
+                                <ul>
+                                    <li>Course drop requests are subject to academic office approval</li>
+                                    <li>Dropping courses may affect your graduation timeline</li>
+                                    <li>Financial implications may apply depending on the drop date</li>
+                                    <li>Consult with your academic advisor before finalizing</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <div class="action-buttons">
+                        <a href="review-application.html" class="btn btn-secondary">
+                            <span class="btn-icon">←</span>
+                            Back to Review
+                        </a>
+                        <button type="reset" class="btn btn-outline">
+                            <span class="btn-icon">🔄</span>
+                            Reset Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-icon">📨</span>
+                            Submit Drop Request
+                        </button>
+                    </div>
+
+                    <div class="form-footer">
+                        <p class="footer-text">
+                            <span class="footer-icon">🛡️</span>
+                            Your drop request will be processed securely by the Academic Office
+                        </p>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script/main.js"></script>
+    <script>
+        // Course Drop Request Page Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            loadDropRequest();
+            initializeDropForm();
+        });
+
+        function loadDropRequest() {
+            // Get course info from localStorage or URL parameters
+            const dropData = localStorage.getItem('stellaris_course_drop_request');
+            const urlParams = new URLSearchParams(window.location.search);
+
+            let courseCode, courseGroup;
+
+            if (dropData) {
+                const data = JSON.parse(dropData);
+                courseCode = data.courseCode;
+                courseGroup = data.courseGroup;
+            } else {
+                courseCode = urlParams.get('course');
+                courseGroup = urlParams.get('group');
+            }
+
+            if (!courseCode) {
+                // Redirect back if no course specified
+                window.location.href = 'review-application.html';
+                return;
+            }
+
+            // Display course information
+            displayCourseInfo(courseCode, courseGroup);
+        }
+
+        function displayCourseInfo(courseCode, courseGroup) {
+            const courseInfoDiv = document.getElementById('course-drop-info');
+            courseInfoDiv.innerHTML = `
+                <div class="drop-course-card">
+                    <div class="drop-course-icon">🗑️</div>
+                    <div class="drop-course-details">
+                        <h3>Course: ${courseCode}</h3>
+                        <p>Group: ${courseGroup || 'Not specified'}</p>
+                        <span class="drop-warning">This action will remove the course from your registration</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeDropForm() {
+            const form = document.getElementById('drop-form');
+            const textarea = document.getElementById('drop-explanation');
+            const charCount = document.querySelector('.char-count');
+
+            // Character counter
+            textarea.addEventListener('input', function () {
+                const remaining = this.value.length;
+                charCount.textContent = `${remaining}/500`;
+
+                if (remaining > 450) {
+                    charCount.style.color = '#e6394a';
+                } else {
+                    charCount.style.color = '#666';
+                }
+            });
+
+            // Form submission
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                validateAndSubmitDropRequest();
+            });
+
+            // Show/hide explanation based on "Other" selection
+            const radioButtons = document.querySelectorAll('input[name="drop_reason"]');
+            radioButtons.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (this.value === 'other') {
+                        textarea.setAttribute('required', 'true');
+                        textarea.placeholder = 'Since you selected "Other", please provide a detailed explanation for your drop request.';
+                    } else {
+                        textarea.removeAttribute('required');
+                        textarea.placeholder = 'Please provide a detailed explanation for dropping this course. This information will help the academic office process your request.';
+                    }
+                });
+            });
+        }
+
+        function validateAndSubmitDropRequest() {
+            const selectedReason = document.querySelector('input[name="drop_reason"]:checked');
+            const explanation = document.getElementById('drop-explanation').value.trim();
+
+            // Validation
+            if (!selectedReason) {
+                showNotification('Please select a reason for dropping the course', 'error');
+                return;
+            }
+
+            if (!explanation) {
+                showNotification('Please provide a detailed explanation', 'error');
+                return;
+            }
+
+            if (explanation.length < 20) {
+                showNotification('Please provide a more detailed explanation (at least 20 characters)', 'error');
+                return;
+            }
+
+            // Process drop request
+            submitDropRequest(selectedReason.value, explanation);
+        }
+
+        function submitDropRequest(reason, explanation) {
+            const dropData = JSON.parse(localStorage.getItem('stellaris_course_drop_request'));
+
+            // Create drop request record
+            const dropRequest = {
+                courseCode: dropData.courseCode,
+                courseGroup: dropData.courseGroup,
+                courseId: dropData.courseId,
+                reason: reason,
+                explanation: explanation,
+                requestDate: new Date().toISOString(),
+                status: 'pending'
+            };
+
+            // Save drop request
+            const existingRequests = JSON.parse(localStorage.getItem('stellaris_drop_requests') || '[]');
+            existingRequests.push(dropRequest);
+            localStorage.setItem('stellaris_drop_requests', JSON.stringify(existingRequests));
+
+            // Remove course from active registration
+            removeCourseFromRegistration(dropData.courseId);
+
+            // Clean up temporary drop data
+            localStorage.removeItem('stellaris_course_drop_request');
+
+            showNotification('🎓 Drop request submitted successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = 'review-application.html';
+            }, 2000);
+        }
+
+        function removeCourseFromRegistration(courseId) {
+            const registrationData = JSON.parse(localStorage.getItem('stellaris_course_registration'));
+
+            if (registrationData) {
+                // Remove the course
+                delete registrationData[`add_course${courseId}`];
+                delete registrationData[`add_group${courseId}`];
+
+                // Update timestamp
+                registrationData.last_modified = new Date().toISOString();
+
+                // Save updated registration
+                localStorage.setItem('stellaris_course_registration', JSON.stringify(registrationData));
+            }
+        }
+    </script>
+</body>
+
+</html>

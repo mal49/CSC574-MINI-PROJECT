@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ribeye&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Course Registration Summary - Stellaris University</title>
+</head>
+
+<body>
+    <div class="course-registration-container">
+        <!-- Header Section -->
+        <header class="course-header">
+            <div class="header-content">
+                <h1 class="course-title">📋 Registration Summary</h1>
+                <p class="course-subtitle">Review Your Course Selections</p>
+                <div class="magic-divider"></div>
+                <p class="course-description">Please review your course selections before confirming</p>
+            </div>
+        </header>
+
+        <!-- Summary Container -->
+        <div class="confirmation-container">
+            <div class="summary-card">
+                <div class="summary-header">
+                    <div class="summary-icon">✨</div>
+                    <h2 class="summary-title">Your Course Selections</h2>
+                    <p class="summary-description">Review the courses you've selected for registration</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading your course selections...</p>
+                </div>
+
+                <!-- No Courses State -->
+                <div id="no-courses-state" class="no-courses-state" style="display: none;">
+                    <div class="no-courses-icon">📚</div>
+                    <h3>No Course Data Found</h3>
+                    <p>It seems you haven't selected any courses yet.</p>
+                    <a href="course-registration.html" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Start Course Registration
+                    </a>
+                </div>
+
+                <!-- Courses Summary -->
+                <div id="courses-summary" class="courses-summary" style="display: none;">
+                    <div class="summary-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">📖</span>
+                            Courses to Add
+                        </h3>
+                        <div id="courses-list" class="courses-list">
+                            <!-- Courses will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <div class="confirmation-question">
+                        <div class="question-card">
+                            <div class="question-icon">❓</div>
+                            <h3>Is this information correct?</h3>
+                            <p>Please review your course selections carefully. You can go back to make changes if
+                                needed.</p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="confirmation-actions">
+                        <button type="button" id="edit-courses-btn" class="btn btn-outline">
+                            <span class="btn-icon">✏️</span>
+                            Edit Courses
+                        </button>
+                        <button type="button" id="confirm-registration-btn" class="btn btn-primary">
+                            <span class="btn-icon">✅</span>
+                            Confirm Registration
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Info -->
+            <div class="info-card">
+                <div class="info-icon">ℹ️</div>
+                <div class="info-content">
+                    <h4>Important Information</h4>
+                    <ul>
+                        <li>Course registration will be finalized once confirmed</li>
+                        <li>Changes after confirmation may require administrative approval</li>
+                        <li>Make sure all course codes and groups are correct</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/main.js"></script>
+    <script>
+        // Course Confirmation Page Specific Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            loadCourseConfirmation();
+        });
+
+        function loadCourseConfirmation() {
+            setTimeout(() => {
+                let courseData = null;
+
+                // First try to get data from localStorage
+                const savedData = localStorage.getItem('stellaris_course_registration');
+                if (savedData) {
+                    courseData = JSON.parse(savedData);
+                } else {
+                    // Fallback: check URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const paramData = {};
+
+                    // Extract course data from URL parameters
+                    for (let [key, value] of urlParams) {
+                        if (key.startsWith('add_course') || key.startsWith('add_group')) {
+                            paramData[key] = value;
+                        }
+                    }
+
+                    // Check if we found any course data in URL
+                    const hasCourseData = Object.keys(paramData).some(key =>
+                        key.startsWith('add_course') && paramData[key]
+                    );
+
+                    if (hasCourseData) {
+                        courseData = paramData;
+                        // Save to localStorage for consistency
+                        courseData.timestamp = new Date().toISOString();
+                        courseData.status = 'submitted';
+                        localStorage.setItem('stellaris_course_registration', JSON.stringify(courseData));
+                    }
+                }
+
+                if (!courseData) {
+                    showNoCourses();
+                    return;
+                }
+
+                displayCourseSummary(courseData);
+            }, 1000); // Simulate loading
+        }
+
+        function showNoCourses() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('no-courses-state').style.display = 'block';
+        }
+
+        function displayCourseSummary(courseData) {
+            const coursesList = document.getElementById('courses-list');
+            const coursesToAdd = [];
+
+            // Extract courses to add
+            for (let i = 1; i <= 10; i++) {
+                const courseCode = courseData[`add_course${i}`];
+                const courseGroup = courseData[`add_group${i}`];
+
+                if (courseCode && courseCode.trim()) {
+                    coursesToAdd.push({
+                        code: courseCode.trim(),
+                        group: courseGroup ? courseGroup.trim() : 'Not specified'
+                    });
+                }
+            }
+
+            if (coursesToAdd.length === 0) {
+                showNoCourses();
+                return;
+            }
+
+            // Display courses
+            coursesList.innerHTML = coursesToAdd.map((course, index) => `
+                <div class="course-item">
+                    <div class="course-number">${index + 1}</div>
+                    <div class="course-details">
+                        <div class="course-code">
+                            <span class="label">Course Code:</span>
+                            <span class="value">${course.code}</span>
+                        </div>
+                        <div class="course-group">
+                            <span class="label">Group:</span>
+                            <span class="value">${course.group}</span>
+                        </div>
+                    </div>
+                    <div class="course-status">
+                        <span class="status-badge status-add">Add</span>
+                    </div>
+                </div>
+            `).join('');
+
+            // Show summary section
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('courses-summary').style.display = 'block';
+
+            // Add event listeners
+            document.getElementById('edit-courses-btn').addEventListener('click', function () {
+                window.location.href = 'course-registration.html';
+            });
+
+            document.getElementById('confirm-registration-btn').addEventListener('click', function () {
+                confirmRegistration(coursesToAdd);
+            });
+        }
+
+        function confirmRegistration(courses) {
+            // Update the saved data with confirmed status
+            const savedData = JSON.parse(localStorage.getItem('stellaris_course_registration'));
+            savedData.status = 'confirmed';
+            savedData.confirmed_timestamp = new Date().toISOString();
+            localStorage.setItem('stellaris_course_registration', JSON.stringify(savedData));
+
+            // Show success message
+            showNotification('🎓 Course registration confirmed successfully!', 'success');
+
+            // Redirect to home page after delay
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

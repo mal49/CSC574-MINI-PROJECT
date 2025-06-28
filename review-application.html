@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ribeye&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <title>Review Application - Stellaris University</title>
+</head>
+
+<body>
+    <div class="course-registration-container">
+        <!-- Header Section -->
+        <header class="course-header">
+            <div class="header-content">
+                <h1 class="course-title">📋 Review Application</h1>
+                <p class="course-subtitle">Course Registration Status</p>
+                <div class="magic-divider"></div>
+                <p class="course-description">Review your current course registrations and manage your enrollment</p>
+            </div>
+        </header>
+
+        <!-- Review Container -->
+        <div class="confirmation-container">
+            <div class="summary-card">
+                <div class="summary-header">
+                    <div class="summary-icon">🎓</div>
+                    <h2 class="summary-title">Your Registered Courses</h2>
+                    <p class="summary-description">View and manage your current course registrations</p>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading-state" class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Loading your course registrations...</p>
+                </div>
+
+                <!-- No Courses State -->
+                <div id="no-courses-state" class="no-courses-state" style="display: none;">
+                    <div class="no-courses-icon">📚</div>
+                    <h3>No Course Registrations Found</h3>
+                    <p>You haven't registered for any courses yet.</p>
+                    <a href="course-registration.html" class="btn btn-primary">
+                        <span class="btn-icon">➕</span>
+                        Register for Courses
+                    </a>
+                </div>
+
+                <!-- Courses Review -->
+                <div id="courses-review" class="courses-summary" style="display: none;">
+                    <!-- Registration Status -->
+                    <div class="status-banner" id="status-banner">
+                        <div class="status-icon">✅</div>
+                        <div class="status-info">
+                            <h3>Registration Status: <span id="registration-status">Confirmed</span></h3>
+                            <p>Registered on: <span id="registration-date">Loading...</span></p>
+                        </div>
+                    </div>
+
+                    <div class="summary-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">📖</span>
+                            Current Courses
+                        </h3>
+                        <div id="courses-list" class="courses-list">
+                            <!-- Courses will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="review-actions">
+                        <a href="index.html" class="btn btn-secondary">
+                            <span class="btn-icon">🏠</span>
+                            Back to Home
+                        </a>
+                        <a href="course-registration.html" class="btn btn-outline">
+                            <span class="btn-icon">➕</span>
+                            Add More Courses
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Important Notice -->
+            <div class="info-card">
+                <div class="info-icon">⚠️</div>
+                <div class="info-content">
+                    <h4>Course Drop Policy</h4>
+                    <ul>
+                        <li>Course drops require valid reasons and may be subject to approval</li>
+                        <li>Dropped courses may affect your academic progress and financial aid</li>
+                        <li>Some courses may have specific drop deadlines</li>
+                        <li>Contact academic advisor for guidance before dropping courses</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script/main.js"></script>
+    <script>
+        // Review Application Page Specific Logic
+        document.addEventListener('DOMContentLoaded', function () {
+            loadCourseReview();
+        });
+
+        function loadCourseReview() {
+            setTimeout(() => {
+                const savedData = localStorage.getItem('stellaris_course_registration');
+
+                if (!savedData) {
+                    showNoCourses();
+                    return;
+                }
+
+                const courseData = JSON.parse(savedData);
+
+                // Check if registration is confirmed
+                if (courseData.status !== 'confirmed') {
+                    showUnconfirmedRegistration();
+                    return;
+                }
+
+                displayCourseReview(courseData);
+            }, 1000); // Simulate loading
+        }
+
+        function showNoCourses() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('no-courses-state').style.display = 'block';
+        }
+
+        function showUnconfirmedRegistration() {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('no-courses-state').style.display = 'block';
+
+            const noCoursesDiv = document.getElementById('no-courses-state');
+            noCoursesDiv.innerHTML = `
+                <div class="no-courses-icon">⏳</div>
+                <h3>Registration Not Confirmed</h3>
+                <p>Your course registration is not yet confirmed. Please complete the registration process first.</p>
+                <a href="course-registration.html" class="btn btn-primary">
+                    <span class="btn-icon">✨</span>
+                    Complete Registration
+                </a>
+            `;
+        }
+
+        function displayCourseReview(courseData) {
+            const coursesList = document.getElementById('courses-list');
+            const coursesToAdd = [];
+
+            // Extract courses to add
+            for (let i = 1; i <= 10; i++) {
+                const courseCode = courseData[`add_course${i}`];
+                const courseGroup = courseData[`add_group${i}`];
+
+                if (courseCode && courseCode.trim()) {
+                    coursesToAdd.push({
+                        code: courseCode.trim(),
+                        group: courseGroup ? courseGroup.trim() : 'Not specified',
+                        id: i
+                    });
+                }
+            }
+
+            if (coursesToAdd.length === 0) {
+                showNoCourses();
+                return;
+            }
+
+            // Update registration status
+            updateRegistrationStatus(courseData);
+
+            // Display courses with drop option
+            coursesList.innerHTML = coursesToAdd.map((course, index) => `
+                <div class="course-item review-item" id="course-item-${course.id}">
+                    <div class="course-number">${index + 1}</div>
+                    <div class="course-details">
+                        <div class="course-code">
+                            <span class="label">Course Code:</span>
+                            <span class="value">${course.code}</span>
+                        </div>
+                        <div class="course-group">
+                            <span class="label">Group:</span>
+                            <span class="value">${course.group}</span>
+                        </div>
+                    </div>
+                    <div class="course-status">
+                        <span class="status-badge status-confirmed">Confirmed</span>
+                    </div>
+                    <div class="course-actions">
+                        <button class="btn-drop" onclick="dropCourse('${course.code}', '${course.group}', ${course.id})">
+                            <span class="drop-icon">🗑️</span>
+                            Drop
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            // Show review section
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('courses-review').style.display = 'block';
+        }
+
+        function updateRegistrationStatus(courseData) {
+            const statusElement = document.getElementById('registration-status');
+            const dateElement = document.getElementById('registration-date');
+
+            if (courseData.confirmed_timestamp) {
+                const date = new Date(courseData.confirmed_timestamp);
+                dateElement.textContent = date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
+            } else if (courseData.timestamp) {
+                const date = new Date(courseData.timestamp);
+                dateElement.textContent = date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
+            }
+        }
+
+        function dropCourse(courseCode, courseGroup, courseId) {
+            // Store the course to be dropped in localStorage for the drop reason page
+            const dropData = {
+                courseCode: courseCode,
+                courseGroup: courseGroup,
+                courseId: courseId,
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('stellaris_course_drop_request', JSON.stringify(dropData));
+
+            // Redirect to drop reason page
+            window.location.href = `course-drop-reason.html?course=${encodeURIComponent(courseCode)}&group=${encodeURIComponent(courseGroup)}`;
+        }
+    </script>
+</body>
+
+</html>

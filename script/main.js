@@ -24,8 +24,11 @@ function initializeApp() {
 
 function initializeFormValidation() {
     // Login form validation
-    const loginForm = document.querySelector('.login-content');
+    const loginForm = document.getElementById('login-form');
     if (loginForm) {
+        loginForm.addEventListener('submit', validateLogin);
+        
+        // Also add click listener for backward compatibility
         const submitBtn = loginForm.querySelector('input[type="submit"]');
         if (submitBtn) {
             submitBtn.addEventListener('click', validateLogin);
@@ -44,10 +47,13 @@ function initializeFormValidation() {
     // Course registration form validation
     const courseForm = document.querySelector('.registration-form');
     if (courseForm) {
-        const submitBtn = courseForm.querySelector('.submit-btn');
+        const submitBtn = courseForm.querySelector('button[type="submit"]');
         if (submitBtn) {
             submitBtn.addEventListener('click', validateCourseRegistration);
         }
+        
+        // Also add form submit listener as backup
+        courseForm.addEventListener('submit', validateCourseRegistration);
     }
 }
 
@@ -66,11 +72,23 @@ function validateLogin(e) {
         return false;
     }
 
-    // Simulate login success
-    showNotification('✨ Welcome to Stellaris University!', 'success');
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 1500);
+    // Check for lecturer credentials
+    const lecturerUsernames = ['lecturer', 'admin', 'professor', 'dr.smith', 'prof.wilson'];
+    const isLecturer = lecturerUsernames.includes(username.toLowerCase());
+
+    if (isLecturer) {
+        // Lecturer login
+        showNotification('👩‍🏫 Welcome to Lecturer Dashboard!', 'success');
+        setTimeout(() => {
+            window.location.href = 'lecturer-dashboard.html';
+        }, 1500);
+    } else {
+        // Student login
+        showNotification('✨ Welcome to Stellaris University!', 'success');
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1500);
+    }
 }
 
 function validateSignup(e) {
@@ -161,10 +179,10 @@ function validateCourseRegistration(e) {
 
     // Save form data
     saveCourseRegistrationData();
-    showNotification('🎓 Course registration submitted successfully!', 'success');
+    showNotification('🎓 Course registration data saved! Redirecting to confirmation...', 'success');
     setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 2000);
+        window.location.href = 'course-confirmation.html';
+    }, 1500);
 }
 
 // ==================== AUTO-SAVE FUNCTIONALITY ====================
